@@ -75,9 +75,14 @@ public class UserController {
      */
     //getAllUser
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUser() {
+    public ResponseEntity<List<UserDto>> getAllUser(
+            @RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize,
+            @RequestParam(value = "sortBy",defaultValue = "name",required = false) String sortBy,
+            @RequestParam(value = "sortDir",defaultValue = "asc",required = false) String sortDir
+    ) {
         log.info("Initiated Request for Get All Users Details");
-        List<UserDto> allUser = this.userService.getAllUser();
+        List<UserDto> allUser = this.userService.getAllUser(pageNumber, pageSize,sortBy,sortDir);
         log.info("Completed Request for Get All Users Details");
         return new ResponseEntity<>(allUser, HttpStatus.OK);
 

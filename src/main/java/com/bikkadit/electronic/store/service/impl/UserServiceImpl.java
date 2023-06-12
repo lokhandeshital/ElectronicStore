@@ -9,6 +9,10 @@ import com.bikkadit.electronic.store.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -101,10 +105,17 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<UserDto> getAllUser() {
+    public List<UserDto> getAllUser(Integer pageNumber,Integer pageSize,String sortBy,String sortDir) {
 
         log.info("Initiated Request for Get All Users Details");
-        List<User> findAll = this.userRepository.findAll();
+
+        Sort sort = Sort.by(sortBy);
+        //PageNumber Default Start From 0
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        Page<User> page = this.userRepository.findAll(pageable);
+
+        List<User> findAll = page.getContent();
 
         List<UserDto> allList = findAll.stream().map(user -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
 
