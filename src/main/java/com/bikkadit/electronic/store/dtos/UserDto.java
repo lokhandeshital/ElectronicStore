@@ -1,7 +1,9 @@
 package com.bikkadit.electronic.store.dtos;
 
+import com.bikkadit.electronic.store.validator.ImageNameValid;
 import lombok.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -11,13 +13,13 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UserDto extends CustomDto{
 
-
     private String userId;
 
     @Size(min = 3, max = 20, message = "Username should contain min 3 and max 20 characters")
     private String userName;
 
     @NotEmpty(message = "Invalid Email Address")
+    @Email
     private String email;
 
     @NotEmpty
@@ -32,6 +34,7 @@ public class UserDto extends CustomDto{
     @Size(min = 10, max = 1000, message = "Write Something About Yourself")
     private String about;
 
+    @ImageNameValid
     private String imageName;
 
 

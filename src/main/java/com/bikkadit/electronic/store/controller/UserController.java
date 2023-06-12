@@ -46,9 +46,9 @@ public class UserController {
     //update
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable String userId) {
-        log.info("Initiated Request for Update User with userId:{}", userId);
+        log.info("Initiated Request for Update User with userId : {}", userId);
         UserDto userUpdate = this.userService.updateUser(userDto, userId);
-        log.info("Completed Request for Update User with userId:{}", userId);
+        log.info("Completed Request for Update User with userId : {}", userId);
         return new ResponseEntity<>(userUpdate, HttpStatus.OK);
     }
 
@@ -61,9 +61,9 @@ public class UserController {
     //delete
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable String userId) {
-        log.info("Initiated Request for Delete User with userId:{}", userId);
+        log.info("Initiated Request for Delete User with userId : {}", userId);
         this.userService.deleteUser(userId);
-        log.info("Completed Request for Delete User with userId:{}", userId);
+        log.info("Completed Request for Delete User with userId : {}", userId);
         return new ResponseEntity<>(AppConstant.USER_DELETE, HttpStatus.OK);
 
     }
@@ -92,9 +92,9 @@ public class UserController {
     //getUserById
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable String userId) {
-        log.info("Initiated Request for Get User By Id with userId:{}", userId);
+        log.info("Initiated Request for Get User By Id with userId : {}", userId);
         UserDto userById = this.userService.getUserById(userId);
-        log.info("Completed Request for Get User By Id with userId:{}", userId);
+        log.info("Completed Request for Get User By Id with userId : {}", userId);
         return new ResponseEntity<>(userById, HttpStatus.OK);
 
     }
@@ -108,9 +108,9 @@ public class UserController {
     //getUserByEmail
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
-        log.info("Initiated Request for Get User By Email with email:{}", email);
+        log.info("Initiated Request for Get User By Email with email : {}", email);
         UserDto userByEmail = this.userService.getUserByEmail(email);
-        log.info("Completed Request for Get User By Email with email:{}", email);
+        log.info("Completed Request for Get User By Email with email : {}", email);
         return new ResponseEntity<>(userByEmail, HttpStatus.OK);
     }
 
@@ -123,9 +123,9 @@ public class UserController {
     //search user
     @GetMapping("/search/{keyword}")
     public ResponseEntity<List<UserDto>> searchUser(@PathVariable String keyword) {
-        log.info("Initiated Request for Search User with keyword:{}", keyword);
+        log.info("Initiated Request for Search User with keyword : {}", keyword);
         List<UserDto> searchUser = this.userService.searchUser(keyword);
-        log.info("Completed Request for Search User with keyword:{}", keyword);
+        log.info("Completed Request for Search User with keyword : {}", keyword);
         return new ResponseEntity<>(searchUser, HttpStatus.OK);
 
     }
