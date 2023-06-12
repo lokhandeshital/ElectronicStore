@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
 
         log.info("Initiated Request for Get All Users Details");
 
-        Sort sort = Sort.by(sortBy);
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) :(Sort.by(sortBy).ascending());
         //PageNumber Default Start From 0
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
