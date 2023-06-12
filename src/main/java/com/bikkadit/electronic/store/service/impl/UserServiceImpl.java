@@ -1,5 +1,6 @@
 package com.bikkadit.electronic.store.service.impl;
 
+import com.bikkadit.electronic.store.dtos.PageableResponse;
 import com.bikkadit.electronic.store.dtos.UserDto;
 import com.bikkadit.electronic.store.exception.ResourceNotFoundException;
 import com.bikkadit.electronic.store.helper.AppConstant;
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<UserDto> getAllUser(Integer pageNumber,Integer pageSize,String sortBy,String sortDir) {
+    public PageableResponse<UserDto> getAllUser(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
         log.info("Initiated Request for Get All Users Details");
 
@@ -119,8 +120,17 @@ public class UserServiceImpl implements UserService {
 
         List<UserDto> allList = findAll.stream().map(user -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
 
+        PageableResponse<UserDto> response = new PageableResponse<>();
+        response.setContent(allList);
+        response.setPageNumber(page.getNumber());
+        response.setPageSize(page.getSize());
+        response.setTotalElements(page.getTotalElements());
+        response.setTotalPages(page.getTotalPages());
+        response.setLastPage(page.isLast());
+
         log.info("Completed Request for Get All Users Details");
-        return allList;
+
+        return response;
     }
 
     /**
