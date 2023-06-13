@@ -152,6 +152,13 @@ public class UserController {
 
     }
 
+    /**
+     *
+     * @param image
+     * @param userId
+     * @return
+     * @throws IOException
+     */
     //Upload User Image
     @PostMapping("/image/{userId}")
     public ResponseEntity<ImageResponse> uploadImage(
@@ -169,6 +176,12 @@ public class UserController {
 
     }
 
+    /**
+     *
+     * @param userId
+     * @param response
+     * @throws IOException
+     */
     //Serve User Image
     @GetMapping("/image/{userId}")
     public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
