@@ -26,7 +26,6 @@ public class UserDto extends CustomDto{
     @Size(min = 3, max = 15, message = "Password should be min 3 and max 15 characters")
     private String password;
 
-
     @NotEmpty
     @Size(min = 4, max = 10, message = "Invalid Gender")
     private String gender;
