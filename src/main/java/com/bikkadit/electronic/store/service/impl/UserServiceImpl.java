@@ -4,6 +4,7 @@ import com.bikkadit.electronic.store.dtos.PageableResponse;
 import com.bikkadit.electronic.store.dtos.UserDto;
 import com.bikkadit.electronic.store.exception.ResourceNotFoundException;
 import com.bikkadit.electronic.store.helper.AppConstant;
+import com.bikkadit.electronic.store.helper.Helper;
 import com.bikkadit.electronic.store.model.User;
 import com.bikkadit.electronic.store.repository.UserRepository;
 import com.bikkadit.electronic.store.service.UserService;
@@ -34,10 +35,10 @@ public class UserServiceImpl implements UserService {
 
 
     /**
-     * @author Shital Lokhande
-     * @implNote This Impl is used to create new User
      * @param userDto
      * @return
+     * @author Shital Lokhande
+     * @implNote This Impl is used to create new User
      */
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -50,17 +51,17 @@ public class UserServiceImpl implements UserService {
         User newUser = this.mapper.map(userDto, User.class);
         User saveUser = this.userRepository.save(newUser);
         log.info("Completed Request for save the User Details");
-        UserDto    createUser = this.mapper.map(saveUser, UserDto.class);
+        UserDto createUser = this.mapper.map(saveUser, UserDto.class);
 
         return createUser;
     }
 
     /**
-     * @author Shital Lokhande
-     * @implNote This Impl is used to update User Details
      * @param userDto
      * @param userId
      * @return
+     * @author Shital Lokhande
+     * @implNote This Impl is used to update User Details
      */
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
@@ -83,9 +84,9 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * @param userId
      * @author Shital Lokhande
      * @implNote This Impl is used to delete User Details
-     * @param userId
      */
     @Override
     public void deleteUser(String userId) {
@@ -101,43 +102,44 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * @return
      * @author Shital LOkhande
      * @implNote This Impl is used to get all User Details
-     * @return
      */
     @Override
     public PageableResponse<UserDto> getAllUser(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
         log.info("Initiated Request for Get All Users Details");
 
-        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) :(Sort.by(sortBy).ascending());
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         //PageNumber Default Start From 0
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
         Page<User> page = this.userRepository.findAll(pageable);
 
-        List<User> findAll = page.getContent();
+//        List<User> findAll = page.getContent();
+//
+//        List<UserDto> allList = findAll.stream().map(user -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
+//
+//        PageableResponse<UserDto> response = new PageableResponse<>();
+//        response.setContent(allList);
+//        response.setPageNumber(page.getNumber());
+//        response.setPageSize(page.getSize());
+//        response.setTotalElements(page.getTotalElements());
+//        response.setTotalPages(page.getTotalPages());
+//        response.setLastPage(page.isLast());
 
-        List<UserDto> allList = findAll.stream().map(user -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
-
-        PageableResponse<UserDto> response = new PageableResponse<>();
-        response.setContent(allList);
-        response.setPageNumber(page.getNumber());
-        response.setPageSize(page.getSize());
-        response.setTotalElements(page.getTotalElements());
-        response.setTotalPages(page.getTotalPages());
-        response.setLastPage(page.isLast());
-
+        PageableResponse<UserDto> response = Helper.getPageableResponse(page, UserDto.class);
         log.info("Completed Request for Get All Users Details");
 
         return response;
     }
 
     /**
-     * @author Shital Lokhande
-     * @implNote This Impl is used to get User By UserId
      * @param userId
      * @return
+     * @author Shital Lokhande
+     * @implNote This Impl is used to get User By UserId
      */
     @Override
     public UserDto getUserById(String userId) {
@@ -151,10 +153,10 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * @author Shital Lokhande
-     * @implNote This Impl is used to get User By Email
      * @param email
      * @return
+     * @author Shital Lokhande
+     * @implNote This Impl is used to get User By Email
      */
     @Override
     public UserDto getUserByEmail(String email) {
@@ -168,10 +170,10 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * @author Shital Lokhande
-     * @implNote This Impl is Used to Search User
      * @param keyword
      * @return
+     * @author Shital Lokhande
+     * @implNote This Impl is Used to Search User
      */
     @Override
     public List<UserDto> searchUser(String keyword) {
