@@ -8,6 +8,7 @@ import com.bikkadit.electronic.store.helper.Helper;
 import com.bikkadit.electronic.store.model.Category;
 import com.bikkadit.electronic.store.repository.CategoryRepository;
 import com.bikkadit.electronic.store.service.CategoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
@@ -34,36 +36,37 @@ public class CategoryServiceImpl implements CategoryService {
         String categoryId = UUID.randomUUID().toString();
         categoryDto.setCategoryId(categoryId);
 
+        log.info("Initiated Request for save the Category Details");
         Category newCategory = this.mapper.map(categoryDto, Category.class);
         Category saveCategory = this.categoryRepository.save(newCategory);
+        log.info("Completed Request for save the Category Details");
         CategoryDto createCotegory = this.mapper.map(saveCategory, CategoryDto.class);
-
         return createCotegory;
     }
 
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
 
+        log.info("Initiated Request for Update the Category Details with categoryId : {} ", categoryId);
         Category newCategory = this.categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND + categoryId));
 
         newCategory.setTitle(categoryDto.getTitle());
         newCategory.setDescription(categoryDto.getDescription());
         newCategory.setCoverImage(categoryDto.getCoverImage());
-
         Category saveCategory = this.categoryRepository.save(newCategory);
-
+        log.info("Completed Request for Update the Category Details with categoryId : {} ", categoryId);
         CategoryDto updateCategory = this.mapper.map(saveCategory, CategoryDto.class);
-
         return updateCategory;
     }
 
     @Override
     public void delete(String categoryId) {
 
+        log.info("Initiated Request for Delete the Category with categoryId : {} ", categoryId);
         Category category = this.categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_DELETE + categoryId));
-
+        log.info("Initiated Request for Delete the Category with categoryId : {} ", categoryId);
         this.categoryRepository.delete(category);
 
     }
@@ -71,26 +74,25 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public PageableResponse<CategoryDto> getAll(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
+        log.info("Initiated Request for Get All Category ");
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
 
         //PageNumber Default Start From 0
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-
         Page<Category> page = this.categoryRepository.findAll(pageable);
-
         PageableResponse<CategoryDto> pageableResponse = Helper.getPageableResponse(page, CategoryDto.class);
-
+        log.info("Completed Request for Get All Category ");
         return pageableResponse;
     }
 
     @Override
     public CategoryDto getSingle(String categoryId) {
 
+        log.info("Initiated Request for Get Single Category with categoryId : {} ", categoryId);
         Category category = this.categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND + categoryId));
-
+        log.info("Completed Request for Get Single Category with categoryId : {} ", categoryId);
         CategoryDto singleCategory = this.mapper.map(category, CategoryDto.class);
-
         return singleCategory;
     }
 }
