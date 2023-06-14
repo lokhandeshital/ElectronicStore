@@ -20,6 +20,12 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * @author Shital
+     * @apiNote This Api is used to Create Category
+     * @param categoryDto
+     * @return
+     */
     @PostMapping
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         log.info("Initiated Request for Create Category");
@@ -29,6 +35,12 @@ public class CategoryController {
 
     }
 
+    /**
+     * @apiNote This Api is used to update Category
+     * @param categoryDto
+     * @param categoryId
+     * @return
+     */
     @PutMapping("{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable String categoryId) {
         log.info("Initiated Request for Update Category with categoryId : {} " , categoryId);
@@ -38,6 +50,11 @@ public class CategoryController {
 
     }
 
+    /**
+     * @apiNote This Api is used to Delete Category
+     * @param categoryId
+     * @return
+     */
     @DeleteMapping("{categoryId}")
     public ResponseEntity<String> delete(@PathVariable String categoryId) {
         log.info("Initiated Request for Delete Category with categoryId : {} ", categoryId);
@@ -47,6 +64,14 @@ public class CategoryController {
 
     }
 
+    /**
+     * @apiNote This Api is used to get All Category
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
     @GetMapping
     public ResponseEntity<PageableResponse<CategoryDto>> getAll(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
@@ -61,6 +86,11 @@ public class CategoryController {
 
     }
 
+    /**
+     * @apiNote This Api is used to get Single Category
+     * @param categoryId
+     * @return
+     */
     @GetMapping("{categoryId}")
     public ResponseEntity<CategoryDto> getSingleCategory(@PathVariable String categoryId) {
 

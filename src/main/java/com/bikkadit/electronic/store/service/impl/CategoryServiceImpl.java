@@ -29,6 +29,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private ModelMapper mapper;
 
+    /**
+     * @author Shital Lokhande
+     * @implNote This Impl is used to create new Category
+     * @param categoryDto
+     * @return
+     */
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
 
@@ -44,6 +50,12 @@ public class CategoryServiceImpl implements CategoryService {
         return createCotegory;
     }
 
+    /**
+     * @implNote This Impl is used to update category
+     * @param categoryDto
+     * @param categoryId
+     * @return
+     */
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
 
@@ -60,6 +72,10 @@ public class CategoryServiceImpl implements CategoryService {
         return updateCategory;
     }
 
+    /**
+     * @implNote This Impl is used to delete category
+     * @param categoryId
+     */
     @Override
     public void delete(String categoryId) {
 
@@ -71,6 +87,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
+    /**
+     * @implNote This Impl is used to get All Category
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
     @Override
     public PageableResponse<CategoryDto> getAll(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
@@ -85,6 +109,11 @@ public class CategoryServiceImpl implements CategoryService {
         return pageableResponse;
     }
 
+    /**
+     * @implNote This Impl is used to get Single Category
+     * @param categoryId
+     * @return
+     */
     @Override
     public CategoryDto getSingle(String categoryId) {
 
