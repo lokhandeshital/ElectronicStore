@@ -10,12 +10,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("api/category")
@@ -129,5 +134,16 @@ public class CategoryController {
     }
 
     //Serve Category Image
+    @GetMapping("/image/{categoryId}")
+    public void serveImage(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
+
+        CategoryDto category = categoryService.getSingle(categoryId);
+        log.info("Category cover image name : {}",category.getCoverImage());
+        InputStream resource = fileService.getResource(imageUploadPath, category.getCoverImage());
+
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource,response.getOutputStream());
+
+    }
 
 }
