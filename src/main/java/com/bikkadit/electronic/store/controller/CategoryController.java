@@ -1,16 +1,21 @@
 package com.bikkadit.electronic.store.controller;
 
 import com.bikkadit.electronic.store.dtos.CategoryDto;
+import com.bikkadit.electronic.store.dtos.ImageResponse;
 import com.bikkadit.electronic.store.dtos.PageableResponse;
 import com.bikkadit.electronic.store.helper.AppConstant;
 import com.bikkadit.electronic.store.service.CategoryService;
+import com.bikkadit.electronic.store.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("api/category")
@@ -19,6 +24,11 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private FileService fileService;
+    @Value("${user.profile.image.path}")
+    private String imageUploadPath;
 
     /**
      * @author Shital
@@ -79,9 +89,9 @@ public class CategoryController {
             @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ) {
-        log.info("Initiated Request for Get All Category Details");
+        log.info("Initiated Request for Get All Category Details with pageNumber : {},pageSize : {},sortBy : {},sortDir : {}",pageNumber,pageSize,sortBy,sortDir);
         PageableResponse<CategoryDto> allCategory = this.categoryService.getAll(pageNumber, pageSize, sortBy, sortDir);
-        log.info("Completed Request for Get All Category Details");
+        log.info("Completed Request for Get All Category Details with pageNumber : {},pageSize : {},sortBy : {},sortDir : {}",pageNumber,pageSize,sortBy,sortDir);
         return new ResponseEntity<>(allCategory, HttpStatus.OK);
 
     }
@@ -100,5 +110,24 @@ public class CategoryController {
         return new ResponseEntity<>(singleCategory, HttpStatus.OK);
 
     }
+
+    //Upload Category Cover Image
+    @PostMapping("/image/{categoryId}")
+    public ResponseEntity<ImageResponse> uploadCoverImage(
+            @RequestParam("coverImage")MultipartFile image,
+            @PathVariable String categoryId
+            ) throws IOException {
+
+        String imageName = fileService.uploadFile(image, imageUploadPath);
+        CategoryDto category = categoryService.getSingle(categoryId);
+        category.setCoverImage(imageName);
+        CategoryDto categoryDto = categoryService.updateCategory(category, categoryId);
+
+        ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).success(true).build();
+        return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
+
+    }
+
+    //Serve Category Image
 
 }
