@@ -31,7 +31,7 @@ public class CustomFields {
 
     @Column(name = "modified_by")
     @LastModifiedBy
-    private String lastModifiedBy;
+    private String modifiedBy;
 
     @Column(name = "modified_on",updatable = false)
     @UpdateTimestamp

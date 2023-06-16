@@ -1,5 +1,6 @@
 package com.bikkadit.electronic.store.controller;
 
+import com.bikkadit.electronic.store.dtos.ApiResponse;
 import com.bikkadit.electronic.store.dtos.ImageResponse;
 import com.bikkadit.electronic.store.dtos.PageableResponse;
 import com.bikkadit.electronic.store.dtos.UserDto;
@@ -77,11 +78,12 @@ public class UserController {
      */
     //delete
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable String userId) {
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable String userId) {
         log.info("Initiated Request for Delete User with userId : {}", userId);
         this.userService.deleteUser(userId);
+        ApiResponse apiResponse = ApiResponse.builder().message(AppConstant.USER_DELETE).success(true).build();
         log.info("Completed Request for Delete User with userId : {}", userId);
-        return new ResponseEntity<>(AppConstant.USER_DELETE, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 
     }
 
