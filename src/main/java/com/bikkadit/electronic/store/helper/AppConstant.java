@@ -11,4 +11,10 @@ public class AppConstant {
     public static final String CATEGORY_NOT_FOUND = "Category is not found with Id :";
 
     public static final String CATEGORY_DELETE = "Category Delete Successfully !!!";
+
+    public static final String PRODUCT_NOT_FOUND = "Product is not found with Id :";
+
+    public static final String PRODUCT_DELETE = "Product Delete Successfully !!!";
+
+
 }
