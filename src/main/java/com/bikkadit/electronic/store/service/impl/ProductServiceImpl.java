@@ -27,6 +27,12 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ModelMapper mapper;
 
+    /**
+     * @author Shital Lokhande
+     * @implNote This Impl is used to Create Product
+     * @param productDto
+     * @return
+     */
     @Override
     public ProductDto createProduct(ProductDto productDto) {
 
@@ -39,6 +45,12 @@ public class ProductServiceImpl implements ProductService {
         return createProduct;
     }
 
+    /**
+     * @implNote This Impl is used to Update Product
+     * @param productDto
+     * @param productId
+     * @return
+     */
     @Override
     public ProductDto updateProduct(ProductDto productDto, String productId) {
 
@@ -57,6 +69,10 @@ public class ProductServiceImpl implements ProductService {
         return updateProduct;
     }
 
+    /**
+     * @implNote This Impl is used to Delete Product
+     * @param productId
+     */
     @Override
     public void deleteProduct(String productId) {
 
@@ -67,6 +83,14 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    /**
+     * @implNote This Impl is Used to Get All Products
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
     @Override
     public PageableResponse<ProductDto> getAllProduct(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 
@@ -77,6 +101,11 @@ public class ProductServiceImpl implements ProductService {
         return pageableResponse;
     }
 
+    /**
+     * @implNote This Impl is used to Get Single Product
+     * @param productId
+     * @return
+     */
     @Override
     public ProductDto findById(String productId) {
 
@@ -87,6 +116,14 @@ public class ProductServiceImpl implements ProductService {
         return singleProduct;
     }
 
+    /**
+     * @implNote This Impl is used to Get All Live
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
     @Override
     public PageableResponse<ProductDto> getAllLive(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
@@ -96,6 +133,15 @@ public class ProductServiceImpl implements ProductService {
         return pageableResponse;
     }
 
+    /**
+     * @implNote This Impl is used to Search Product By Title
+     * @param subTitle
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
     @Override
     public PageableResponse<ProductDto> searchByTitle(String subTitle, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
