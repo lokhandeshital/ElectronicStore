@@ -19,6 +19,12 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    /**
+     * @author Shital Lokhande
+     * @apiNote This Api is Used to Create Product
+     * @param productDto
+     * @return
+     */
     //Create
     @PostMapping
     public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto) {
@@ -28,6 +34,12 @@ public class ProductController {
 
     }
 
+    /**
+     * @apiNote This Api is Used to Update Product
+     * @param productDto
+     * @param productId
+     * @return
+     */
     //Update
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable String productId) {
@@ -36,6 +48,11 @@ public class ProductController {
         return new ResponseEntity<>(updateProduct, HttpStatus.OK);
     }
 
+    /**
+     * @apiNote This Api is used to Delete Product
+     * @param productId
+     * @return
+     */
     //Delete
     @DeleteMapping("/{productId}")
     public ResponseEntity<ApiResponse> delete(@PathVariable String productId) {
@@ -46,6 +63,11 @@ public class ProductController {
 
     }
 
+    /**
+     * @apiNote This Api is used to Get Single Product
+     * @param productId
+     * @return
+     */
     //Get By Id
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDto> getById(@PathVariable String productId) {
@@ -55,6 +77,14 @@ public class ProductController {
 
     }
 
+    /**
+     * @apiNote This Api is used to Get All Products
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
     //Get All Product
     @GetMapping
     public ResponseEntity<PageableResponse<ProductDto>> getAllProduct(
@@ -69,6 +99,14 @@ public class ProductController {
 
     }
 
+    /**
+     * @implNote This Api is used to Get All Live
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
     //Get All Live
     @GetMapping("/live")
     public ResponseEntity<PageableResponse<ProductDto>> getAllLive(
@@ -81,6 +119,15 @@ public class ProductController {
         return new ResponseEntity<>(allLive, HttpStatus.OK);
     }
 
+    /**
+     * @apiNote This Api is used to Search Products
+     * @param query
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
     //Search Product
     @GetMapping("/search/{query}")
     public ResponseEntity<PageableResponse<ProductDto>> searchProduct(
