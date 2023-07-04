@@ -8,7 +8,6 @@ import com.bikkadit.electronic.store.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -114,18 +112,23 @@ public class UserServiceTest {
                 .build();
 
         List<User> userList = Arrays.asList(user, user1, user2);
-
         Page<User> page = new PageImpl<>(userList);
-
         Mockito.when(userRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
-
         PageableResponse<UserDto> allUser = userService.getAllUser(1, 2, "userName", "asc");
         Assertions.assertEquals(3, allUser.getContent().size());
 
     }
 
     // Get User By Id Test
+    @Test
     public void getUserByIdTest() {
+
+        String userID = "userIdTest";
+        Mockito.when(userRepository.findById(userID)).thenReturn(Optional.of(user));
+        //Actual Call of service Method
+        UserDto userDto = userService.getUserById(userID);
+        Assertions.assertNotNull(userDto);
+        Assertions.assertEquals(user.getUserName(), userDto.getUserName(), "Name Not Match");
 
     }
 
