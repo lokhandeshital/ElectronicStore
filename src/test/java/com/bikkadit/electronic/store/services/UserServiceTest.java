@@ -1,5 +1,6 @@
 package com.bikkadit.electronic.store.services;
 
+import com.bikkadit.electronic.store.dtos.PageableResponse;
 import com.bikkadit.electronic.store.dtos.UserDto;
 import com.bikkadit.electronic.store.model.User;
 import com.bikkadit.electronic.store.repository.UserRepository;
@@ -13,8 +14,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -82,15 +88,39 @@ public class UserServiceTest {
         String userId = "userIdabc";
 
         Mockito.when(userRepository.findById("userIdabc")).thenReturn(Optional.of(user));
-
         userService.deleteUser(userId);
-
         Mockito.verify(userRepository, Mockito.times(1)).delete(user);
 
     }
 
     // Get All User Test
+    @Test
     public void getAllUserTest() {
+
+        User user1 = User.builder().userName("Sagar")
+                .email("sagar596@gmail.com")
+                .about("This is Testing create method")
+                .gender("male")
+                .imageName("cda.png")
+                .password("sagar")
+                .build();
+
+        User user2 = User.builder().userName("Shubham")
+                .email("shubham596@gmail.com")
+                .about("This is Testing create method")
+                .gender("male")
+                .imageName("pqr.png")
+                .password("shubham")
+                .build();
+
+        List<User> userList = Arrays.asList(user, user1, user2);
+
+        Page<User> page = new PageImpl<>(userList);
+
+        Mockito.when(userRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
+
+        PageableResponse<UserDto> allUser = userService.getAllUser(1, 2, "userName", "asc");
+        Assertions.assertEquals(3, allUser.getContent().size());
 
     }
 
