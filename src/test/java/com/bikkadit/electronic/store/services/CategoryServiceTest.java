@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Optional;
+
 @SpringBootTest
 public class CategoryServiceTest {
 
@@ -51,6 +53,23 @@ public class CategoryServiceTest {
     }
 
     // Update Category Test
+    @Test
+    public void updateCategoryTest() {
+
+        String categoryId = "assghh";
+        CategoryDto categoryDto = CategoryDto.builder().title("Mixer")
+                .description("This Category containing diff type of Mixer")
+                .coverImage("mixer.png")
+                .build();
+
+        Mockito.when(categoryRepository.findById(Mockito.anyString())).thenReturn(Optional.of(category));
+        Mockito.when(categoryRepository.save(Mockito.any())).thenReturn(category);
+
+        CategoryDto updateCategory = categoryService.updateCategory(categoryDto, categoryId);
+        System.out.println(updateCategory.getTitle());
+        Assertions.assertNotNull(categoryDto);
+
+    }
 
     // Delete Category Test
 
