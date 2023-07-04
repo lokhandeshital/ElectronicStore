@@ -72,6 +72,16 @@ public class CategoryServiceTest {
     }
 
     // Delete Category Test
+    @Test
+    public void deleteCategoryTest() {
+
+        String categoryId = "categoryIdabc";
+
+        Mockito.when(categoryRepository.findById("categoryIdabc")).thenReturn(Optional.of(category));
+        categoryService.delete(categoryId);
+        Mockito.verify(categoryRepository, Mockito.times(1)).delete(category);
+    }
+
 
     // Get All Category
 
