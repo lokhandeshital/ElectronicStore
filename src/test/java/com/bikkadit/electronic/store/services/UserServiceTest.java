@@ -132,5 +132,21 @@ public class UserServiceTest {
 
     }
 
+    // Get User By Email
+    @Test
+    public void getUserByEmailTest() {
+
+        String emailId = "shitallokhande596@gmail.com";
+
+        Mockito.when(userRepository.findByEmail(emailId)).thenReturn(Optional.of(user));
+
+        UserDto userDto = userService.getUserByEmail(emailId);
+        Assertions.assertNotNull(userDto);
+        Assertions.assertEquals(user.getEmail(), userDto.getEmail(), "Email Not Found");
+
+    }
+
+    //Search User
+
 
 }
