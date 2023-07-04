@@ -1,6 +1,7 @@
 package com.bikkadit.electronic.store.services;
 
 import com.bikkadit.electronic.store.dtos.CategoryDto;
+import com.bikkadit.electronic.store.dtos.PageableResponse;
 import com.bikkadit.electronic.store.model.Category;
 import com.bikkadit.electronic.store.repository.CategoryRepository;
 import com.bikkadit.electronic.store.service.CategoryService;
@@ -12,7 +13,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -84,6 +90,27 @@ public class CategoryServiceTest {
 
 
     // Get All Category
+    @Test
+    public void getAllCategoryTest() {
+
+        Category category1 = Category.builder().title("Computer")
+                .description("This Category containing diff type of Computer")
+                .coverImage("computer.png")
+                .build();
+
+        Category category2 = Category.builder().title("Mobile Phone")
+                .description("This Category containing diff type of Mobile Phone")
+                .coverImage("mobile.png")
+                .build();
+
+        List<Category> categoryList = Arrays.asList(category, category1, category2);
+        Page<Category> page = new PageImpl<>(categoryList);
+        Mockito.when(categoryRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
+        PageableResponse<CategoryDto> allCategory = categoryService.getAll(1, 2, "title", "asc");
+        Assertions.assertEquals(3, allCategory.getContent().size());
+
+
+    }
 
     // Get Single Category
 
