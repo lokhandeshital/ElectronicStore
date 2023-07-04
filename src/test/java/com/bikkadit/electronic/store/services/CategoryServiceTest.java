@@ -113,6 +113,17 @@ public class CategoryServiceTest {
     }
 
     // Get Single Category
+    @Test
+    public void getSingleCategoryTest() {
+
+        String categoryId = "categoryIdTest";
+        Mockito.when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+
+        CategoryDto categoryDto = categoryService.getSingle(categoryId);
+        Assertions.assertNotNull(categoryDto);
+        Assertions.assertEquals(category.getTitle(), categoryDto.getTitle(), "Title Not Found");
+
+    }
 
 
 }
