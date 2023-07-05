@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Optional;
+
 @SpringBootTest
 public class ProductServiceTest {
 
@@ -54,8 +56,29 @@ public class ProductServiceTest {
 
     }
 
-
     // Update Product Test
+    @Test
+    public void updateProductTest() {
+
+        String productId = "";
+        ProductDto productDto = ProductDto.builder().title("Samsung Tv")
+                .description("This Tv Contain many Feature")
+                .price(60000.00)
+                .discountedPrice(50000.00)
+                .quantity(10l)
+                .live(true)
+                .stock(true)
+                .build();
+
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(product));
+        Mockito.when(productRepository.save(Mockito.any())).thenReturn(product);
+
+        ProductDto updateProduct = productService.updateProduct(productDto, productId);
+        System.out.println(updateProduct.getTitle());
+        Assertions.assertNotNull(productDto);
+
+    }
+
 
     // Delete Product Test
 
@@ -65,5 +88,5 @@ public class ProductServiceTest {
 
     // Get All Live Test
 
-    // Sarch By Title Test
+    // Search By Title Test
 }
