@@ -130,6 +130,18 @@ public class ProductServiceTest {
     }
 
     // Get Single Product Test
+    @Test
+    public void getSingleProductTest() {
+
+        String productId = "productIdTest";
+        Mockito.when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+        ProductDto productDto = productService.findById(productId);
+        Assertions.assertNotNull(productDto);
+        Assertions.assertEquals(product.getTitle(), productDto.getTitle(), "Product Not Matched");
+
+    }
+
 
     // Get All Live Test
 
