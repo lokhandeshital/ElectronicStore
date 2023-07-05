@@ -172,4 +172,43 @@ public class ProductServiceTest {
     }
 
     // Search By Title Test
+    @Test
+    public void searchByTitleTest() {
+
+        Product product = Product.builder().title("Samsung Tv")
+                .description("This Tv Contain many Feature")
+                .price(60000.00)
+                .discountedPrice(50000.00)
+                .quantity(10l)
+                .live(true)
+                .stock(true)
+                .build();
+
+        Product product1 = Product.builder().title("OnePlus Tv")
+                .description("This Tv Contain many Feature")
+                .price(80000.00)
+                .discountedPrice(70000.00)
+                .quantity(10l)
+                .live(true)
+                .stock(true)
+                .build();
+
+        Product product2 = Product.builder().title("Realme Tv")
+                .description("This Tv Contain many Feature")
+                .price(60000.00)
+                .discountedPrice(50000.00)
+                .quantity(10l)
+                .live(true)
+                .stock(true)
+                .build();
+
+        List<Product> productList = Arrays.asList(product, product1, product2);
+        Page<Product> page = new PageImpl<>(productList);
+
+        Mockito.when(productRepository.findByTitleContaining(("Tv") , (Pageable) Mockito.any())).thenReturn(page);
+        PageableResponse<ProductDto> searchByTitle = productService.searchByTitle("Tv", 1, 2, "title", "asc");
+        Assertions.assertEquals(3, searchByTitle.getContent().size());
+
+
+    }
 }
