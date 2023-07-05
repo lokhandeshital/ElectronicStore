@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class ProductDto extends CustomDto{
 
     private String productId;
