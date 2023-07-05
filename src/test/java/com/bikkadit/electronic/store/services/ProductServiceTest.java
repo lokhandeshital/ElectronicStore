@@ -1,6 +1,7 @@
 package com.bikkadit.electronic.store.services;
 
 import com.bikkadit.electronic.store.dtos.ProductDto;
+import com.bikkadit.electronic.store.helper.AppConstant;
 import com.bikkadit.electronic.store.model.Product;
 import com.bikkadit.electronic.store.repository.ProductRepository;
 import com.bikkadit.electronic.store.service.ProductService;
@@ -88,12 +89,12 @@ public class ProductServiceTest {
         Mockito.when(productRepository.findById("productIdabc")).thenReturn(Optional.of(product));
         productService.deleteProduct(productId);
         Mockito.verify(productRepository, Mockito.times(1)).delete(product);
-        System.out.println("Product Deleted Successfully !!");
+        System.out.println(AppConstant.PRODUCT_DELETE);
 
     }
 
-
     // Get All Product Test
+
 
     // Get Single Product Test
 
