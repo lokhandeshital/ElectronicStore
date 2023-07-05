@@ -1,5 +1,6 @@
 package com.bikkadit.electronic.store.services;
 
+import com.bikkadit.electronic.store.dtos.PageableResponse;
 import com.bikkadit.electronic.store.dtos.ProductDto;
 import com.bikkadit.electronic.store.helper.AppConstant;
 import com.bikkadit.electronic.store.model.Product;
@@ -13,7 +14,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -94,7 +100,35 @@ public class ProductServiceTest {
     }
 
     // Get All Product Test
+    @Test
+    public void getAllProductTest() {
 
+        Product product1 = Product.builder().title("OnePlus Tv")
+                .description("This Tv Contain many Feature")
+                .price(80000.00)
+                .discountedPrice(70000.00)
+                .quantity(10l)
+                .live(true)
+                .stock(true)
+                .build();
+
+        Product product2 = Product.builder().title("Realme Tv")
+                .description("This Tv Contain many Feature")
+                .price(60000.00)
+                .discountedPrice(50000.00)
+                .quantity(10l)
+                .live(true)
+                .stock(true)
+                .build();
+
+        List<Product> productList = Arrays.asList(product, product1, product2);
+        Page<Product> page = new PageImpl<>(productList);
+        Mockito.when(productRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
+        PageableResponse<ProductDto> allProduct = productService.getAllProduct(1, 2, "title", "asc");
+        Assertions.assertEquals(3, allProduct.getContent().size());
+
+
+    }
 
     // Get Single Product Test
 
