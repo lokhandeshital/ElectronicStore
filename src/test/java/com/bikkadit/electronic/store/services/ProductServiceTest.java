@@ -60,7 +60,7 @@ public class ProductServiceTest {
     @Test
     public void updateProductTest() {
 
-        String productId = "";
+        String productId = "abcdef";
         ProductDto productDto = ProductDto.builder().title("Samsung Tv")
                 .description("This Tv Contain many Feature")
                 .price(60000.00)
@@ -79,8 +79,19 @@ public class ProductServiceTest {
 
     }
 
-
     // Delete Product Test
+    @Test
+    public void deleteProductTest() {
+
+        String productId = "productIdabc";
+
+        Mockito.when(productRepository.findById("productIdabc")).thenReturn(Optional.of(product));
+        productService.deleteProduct(productId);
+        Mockito.verify(productRepository, Mockito.times(1)).delete(product);
+        System.out.println("Product Deleted Successfully !!");
+
+    }
+
 
     // Get All Product Test
 
