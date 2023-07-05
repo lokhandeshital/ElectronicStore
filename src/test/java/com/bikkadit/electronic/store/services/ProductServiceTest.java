@@ -143,6 +143,33 @@ public class ProductServiceTest {
     }
 
     // Get All Live Test
+    @Test
+    public void getAllLiveTest() {
+
+        Product product1 = Product.builder().title("OnePlus Tv")
+                .description("This Tv Contain many Feature")
+                .price(80000.00)
+                .discountedPrice(70000.00)
+                .quantity(10l)
+                .live(true)
+                .stock(true)
+                .build();
+
+        Product product2 = Product.builder().title("Realme Tv")
+                .description("This Tv Contain many Feature")
+                .price(60000.00)
+                .discountedPrice(50000.00)
+                .quantity(10l)
+                .live(true)
+                .stock(true)
+                .build();
+
+        List<Product> productList = Arrays.asList(product, product1, product2);
+        Page<Product> page = new PageImpl<>(productList);
+        Mockito.when(productRepository.findByLiveTrue((Pageable) Mockito.any())).thenReturn(page);
+        PageableResponse<ProductDto> allLive = productService.getAllLive(1, 2, "title", "asc");
+        Assertions.assertEquals(3, allLive.getContent().size());
+    }
 
     // Search By Title Test
 }
