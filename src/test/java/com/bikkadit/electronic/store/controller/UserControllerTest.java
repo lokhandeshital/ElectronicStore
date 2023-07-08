@@ -1,6 +1,7 @@
 package com.bikkadit.electronic.store.controller;
 
 import com.bikkadit.electronic.store.dtos.UserDto;
+import com.bikkadit.electronic.store.helper.AppConstant;
 import com.bikkadit.electronic.store.model.User;
 import com.bikkadit.electronic.store.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,8 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
@@ -73,16 +73,35 @@ public class UserControllerTest {
     public void updateUserTest() throws Exception {
 
         String userId = "abhgsf";
-        Mockito.when(userService.updateUser(Mockito.any(),Mockito.anyString())).thenReturn(mapper.map(user, UserDto.class));
+        Mockito.when(userService.updateUser(Mockito.any(), Mockito.anyString())).thenReturn(mapper.map(user, UserDto.class));
         this.mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/user/" + userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(converObjectToJsonString(user))
-                        .accept(MediaType.APPLICATION_JSON))
+                        MockMvcRequestBuilders.put("/api/user/" + userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(converObjectToJsonString(user))
+                                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userName").exists());
 
+
+    }
+
+    @Test
+    public void deleteUserTest() throws Exception {
+
+        String userId = "agjccbb";
+
+        Mockito.doNothing().when(userService).deleteUser(userId);
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/api/user/" + userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+              //.andExpect(content().string(AppConstant.USER_DELETE + userId));
+
+
+        Mockito.verify(userService).deleteUser(userId);
 
     }
 
