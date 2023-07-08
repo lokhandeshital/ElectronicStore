@@ -58,14 +58,31 @@ public class UserControllerTest {
 
         //actual request for url
         this.mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/user/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(converObjectToJsonString(user))
-                        .accept(MediaType.APPLICATION_JSON))
+                        MockMvcRequestBuilders.post("/api/user/")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(converObjectToJsonString(user))
+                                .accept(MediaType.APPLICATION_JSON))
 
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.userName").exists());
+
+    }
+
+    @Test
+    public void updateUserTest() throws Exception {
+
+        String userId = "abhgsf";
+        Mockito.when(userService.updateUser(Mockito.any(),Mockito.anyString())).thenReturn(mapper.map(user, UserDto.class));
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/user/" + userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(converObjectToJsonString(user))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userName").exists());
+
 
     }
 
@@ -77,7 +94,6 @@ public class UserControllerTest {
             e.printStackTrace();
             return null;
         }
-
     }
 
 
