@@ -12,15 +12,12 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryDto extends CustomDto{
+public class CategoryDto extends CustomDto {
 
     private String categoryId;
 
-    @Size(min = 4, message = "Title Contain Min 4 Character !!")
-    @NotEmpty
     private String title;
 
-    @NotBlank(message = "Description Required !!")
     private String description;
 
     private String coverImage;

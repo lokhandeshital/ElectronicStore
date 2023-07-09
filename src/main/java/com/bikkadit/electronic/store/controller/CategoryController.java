@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @RestController
-@RequestMapping("api/category")
+@RequestMapping("/api/category/")
 @Slf4j
 public class CategoryController {
 
