@@ -39,7 +39,7 @@ public class CategoryControllerTest {
     @BeforeEach
     public void init() {
 
-        category = Category.builder().title("Mobible Phone")
+        category = Category.builder().title("Mobile Phone")
                 .description("This Category Contain Diff Type of Mobile Phone")
                 .coverImage("Phone.png")
                 .build();
@@ -77,7 +77,6 @@ public class CategoryControllerTest {
     }
 
     //Update Category Test
-
     @Test
     public void updateCategoryTest() throws Exception {
 
@@ -95,6 +94,19 @@ public class CategoryControllerTest {
 
     }
 
-
     //Delete Category Test
+    @Test
+    public void deleteCategoryTest() throws Exception {
+
+        String categoryId = "abdhc123";
+
+        Mockito.doNothing().when(categoryService).delete(categoryId);
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/api/category/" + categoryId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
 }
