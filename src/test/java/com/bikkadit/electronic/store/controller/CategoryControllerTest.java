@@ -144,6 +144,23 @@ public class CategoryControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
+    }
+
+    // Get Single Category Test
+    @Test
+    public void getSingleCategoryTest() throws Exception {
+
+        String categoryId = "acbshd12";
+
+        CategoryDto categoryDto = this.mapper.map(category, CategoryDto.class);
+        Mockito.when(categoryService.getSingle(Mockito.any())).thenReturn(categoryDto);
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/category/" + categoryId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
 
     }
 }
