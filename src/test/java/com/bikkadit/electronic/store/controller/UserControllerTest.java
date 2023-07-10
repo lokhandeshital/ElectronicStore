@@ -164,6 +164,39 @@ public class UserControllerTest {
     }
 
     //Get Single User Test
+    @Test
+    public void getSingleUserTest() throws Exception {
+
+        String userId = "achcdk652";
+
+        UserDto userDto = this.mapper.map(user, UserDto.class);
+        Mockito.when(userService.getUserById(Mockito.any())).thenReturn(userDto);
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/user/" + userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
+    // Get Single User By Email Test
+    @Test
+    public void getSingleUserByEmailTest() throws Exception {
+
+        String email = "shital596@Gamil.com";
+
+        UserDto userDto = this.mapper.map(user, UserDto.class);
+        Mockito.when(userService.getUserByEmail(Mockito.any())).thenReturn(userDto);
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/user/" + email)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
 
 
 }
