@@ -173,5 +173,49 @@ public class ProductControllerTest {
 
     }
 
+    // Get All Live Test
+    @Test
+    public void getAllLiveTest() throws Exception {
+
+        ProductDto productDto1 = ProductDto.builder().title("Samsung Tv")
+                .description("This Tv Contain many Feature")
+                .quantity(10l)
+                .price(60000.00)
+                .discountedPrice(55000.00)
+                .stock(true)
+                .live(true)
+                .build();
+
+        ProductDto productDto2 = ProductDto.builder().title("OnePlus Tv")
+                .description("This Tv Contain many Feature")
+                .quantity(10l)
+                .price(80000.00)
+                .discountedPrice(75000.00)
+                .stock(true)
+                .live(true)
+                .build();
+
+        ProductDto productDto3 = ProductDto.builder().title("LG Tv")
+                .description("This Tv Contain many Feature")
+                .quantity(10l)
+                .price(70000.00)
+                .discountedPrice(65000.00)
+                .stock(true)
+                .live(true)
+                .build();
+
+        PageableResponse<ProductDto> pageableResponse = new PageableResponse<>();
+        pageableResponse.setContent(Arrays.asList(productDto1, productDto2, productDto3));
+
+        Mockito.when(productService.getAllLive(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString())).thenReturn(pageableResponse);
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/products/" + true)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
 
 }
