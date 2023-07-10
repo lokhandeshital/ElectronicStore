@@ -48,9 +48,9 @@ public class ProductControllerTest {
                 .build();
     }
 
-    // Create Category Test
+    // Create Product Test
     @Test
-    public void createCategoryTest() throws Exception {
+    public void createProductTest() throws Exception {
 
         ProductDto productDto = mapper.map(product, ProductDto.class);
         Mockito.when(productService.createProduct(Mockito.any())).thenReturn(productDto);
@@ -76,11 +76,27 @@ public class ProductControllerTest {
         }
     }
 
-    // Update Category Test
+    // Update Product Test
+    @Test
+    public void updateProductTest() throws Exception {
 
-    // Delete Category Test
+        String productId = "acdvfdf";
 
-    // Get All Category Test
+        Mockito.when(productService.updateProduct(Mockito.any(), Mockito.anyString())).thenReturn(mapper.map(product, ProductDto.class));
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.put("/api/products/" + productId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(converObjectToJsonString(product))
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").exists());
+
+    }
+
+    // Delete Product Test
+
+    // Get All Product Test
 
 
 }
