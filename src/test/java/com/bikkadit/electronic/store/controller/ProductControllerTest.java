@@ -155,7 +155,23 @@ public class ProductControllerTest {
                 .andExpect(status().isOk());
 
     }
+
     // Get Single Product
+    @Test
+    public void getSingleProductTest() throws Exception {
+
+        String productId = "avcjdbcc12";
+
+        ProductDto productDto = this.mapper.map(product, ProductDto.class);
+        Mockito.when(productService.findById(Mockito.any())).thenReturn(productDto);
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/products/" + productId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
 
 
 }
