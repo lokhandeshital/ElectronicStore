@@ -1,5 +1,6 @@
 package com.bikkadit.electronic.store.controller;
 
+import com.bikkadit.electronic.store.dtos.PageableResponse;
 import com.bikkadit.electronic.store.dtos.ProductDto;
 import com.bikkadit.electronic.store.model.Product;
 import com.bikkadit.electronic.store.service.ProductService;
@@ -15,6 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -110,6 +113,49 @@ public class ProductControllerTest {
 
 
     // Get All Product Test
+    @Test
+    public void getAllProductTest() throws Exception {
+
+        ProductDto productDto1 = ProductDto.builder().title("Samsung Tv")
+                .description("This Tv Contain many Feature")
+                .quantity(10l)
+                .price(60000.00)
+                .discountedPrice(55000.00)
+                .stock(true)
+                .live(true)
+                .build();
+
+        ProductDto productDto2 = ProductDto.builder().title("Samsung Tv")
+                .description("This Tv Contain many Feature")
+                .quantity(10l)
+                .price(60000.00)
+                .discountedPrice(55000.00)
+                .stock(true)
+                .live(true)
+                .build();
+
+        ProductDto productDto3 = ProductDto.builder().title("Samsung Tv")
+                .description("This Tv Contain many Feature")
+                .quantity(10l)
+                .price(60000.00)
+                .discountedPrice(55000.00)
+                .stock(true)
+                .live(true)
+                .build();
+
+        PageableResponse<ProductDto> pageableResponse = new PageableResponse<>();
+        pageableResponse.setContent(Arrays.asList(productDto1, productDto2, productDto3));
+
+        Mockito.when(productService.getAllProduct(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString())).thenReturn(pageableResponse);
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/products/")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+    // Get Single Product
 
 
 }
