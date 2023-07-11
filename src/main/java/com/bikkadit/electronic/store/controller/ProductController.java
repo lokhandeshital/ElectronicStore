@@ -153,6 +153,13 @@ public class ProductController {
         return new ResponseEntity<>(allLive, HttpStatus.OK);
     }
 
+    /**
+     * @apiNote This Api is Used to Upload Image
+     * @param productId
+     * @param image
+     * @return
+     * @throws IOException
+     */
     //Upload Image
     @PostMapping("/image/{productId}")
     public ResponseEntity<ImageResponse> uploadProductImage(
@@ -170,6 +177,12 @@ public class ProductController {
 
     }
 
+    /**
+     * @apiNote This Api is Used to Serve The Image
+     * @param productId
+     * @param response
+     * @throws IOException
+     */
     //Serve Image
     @GetMapping("/image/{productId}")
     public void serveUserImage(
