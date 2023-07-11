@@ -121,6 +121,13 @@ public class CategoryController {
 
     }
 
+    /**
+     * This Api is Used to Upload Category Cover Image
+     * @param image
+     * @param categoryId
+     * @return
+     * @throws IOException
+     */
     //Upload Category Cover Image
     @PostMapping("/image/{categoryId}")
     public ResponseEntity<ImageResponse> uploadCoverImage(
@@ -138,6 +145,12 @@ public class CategoryController {
 
     }
 
+    /**
+     * @apiNote This Api is used to Serve Category Image
+     * @param categoryId
+     * @param response
+     * @throws IOException
+     */
     //Serve Category Image
     @GetMapping("/image/{categoryId}")
     public void serveImage(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
@@ -151,6 +164,12 @@ public class CategoryController {
 
     }
 
+    /**
+     * @apiNote This Api is used to Create Product with Category
+     * @param categoryId
+     * @param productDto
+     * @return
+     */
     // Create Product With Category
     @PostMapping("/{categoryId}/products")
     public ResponseEntity<ProductDto> createProductWithCategory(
@@ -162,6 +181,12 @@ public class CategoryController {
 
     }
 
+    /**
+     * @apiNote This Api is used to Update Category of Products
+     * @param categoryId
+     * @param productId
+     * @return
+     */
     //Update Category Of Product
     @PutMapping("/{categoryId}/products/{productId}")
     public ResponseEntity<ProductDto> updateCategoryOfProduct(
@@ -173,6 +198,15 @@ public class CategoryController {
 
     }
 
+    /**
+     * @apiNote This Api is used to Get All Products Of Category
+     * @param categoryId
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
     //Get Products Of Category
     @GetMapping("/{categoryId}/products")
     public ResponseEntity<PageableResponse<ProductDto>> getProductsOfCategory(
