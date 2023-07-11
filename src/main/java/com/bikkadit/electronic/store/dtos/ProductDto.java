@@ -30,5 +30,7 @@ public class ProductDto extends CustomDto {
 
     private Boolean stock;
 
+    private String productImageName;
+
 
 }

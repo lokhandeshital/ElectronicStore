@@ -1,16 +1,22 @@
 package com.bikkadit.electronic.store.controller;
 
-import com.bikkadit.electronic.store.dtos.ApiResponse;
-import com.bikkadit.electronic.store.dtos.PageableResponse;
-import com.bikkadit.electronic.store.dtos.ProductDto;
+import com.bikkadit.electronic.store.dtos.*;
 import com.bikkadit.electronic.store.helper.AppConstant;
+import com.bikkadit.electronic.store.service.FileService;
 import com.bikkadit.electronic.store.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @RequestMapping("/api/products/")
@@ -19,11 +25,17 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private FileService fileService;
+
+    @Value("${product.image.path}")
+    private String imagePath;
+
     /**
-     * @author Shital Lokhande
-     * @apiNote This Api is Used to Create Product
      * @param productDto
      * @return
+     * @author Shital Lokhande
+     * @apiNote This Api is Used to Create Product
      */
     //Create
     @PostMapping
@@ -35,10 +47,10 @@ public class ProductController {
     }
 
     /**
-     * @apiNote This Api is Used to Update Product
      * @param productDto
      * @param productId
      * @return
+     * @apiNote This Api is Used to Update Product
      */
     //Update
     @PutMapping("/{productId}")
@@ -49,9 +61,9 @@ public class ProductController {
     }
 
     /**
-     * @apiNote This Api is used to Delete Product
      * @param productId
      * @return
+     * @apiNote This Api is used to Delete Product
      */
     //Delete
     @DeleteMapping("/{productId}")
@@ -64,9 +76,9 @@ public class ProductController {
     }
 
     /**
-     * @apiNote This Api is used to Get Single Product
      * @param productId
      * @return
+     * @apiNote This Api is used to Get Single Product
      */
     //Get By Id
     @GetMapping("/{productId}")
@@ -78,12 +90,12 @@ public class ProductController {
     }
 
     /**
-     * @apiNote This Api is used to Get All Products
      * @param pageNumber
      * @param pageSize
      * @param sortBy
      * @param sortDir
      * @return
+     * @apiNote This Api is used to Get All Products
      */
     //Get All Product
     @GetMapping
@@ -100,12 +112,12 @@ public class ProductController {
     }
 
     /**
-     * @implNote This Api is used to Get All Live
      * @param pageNumber
      * @param pageSize
      * @param sortBy
      * @param sortDir
      * @return
+     * @implNote This Api is used to Get All Live
      */
     //Get All Live
     @GetMapping("/live")
@@ -120,13 +132,13 @@ public class ProductController {
     }
 
     /**
-     * @apiNote This Api is used to Search Products
      * @param query
      * @param pageNumber
      * @param pageSize
      * @param sortBy
      * @param sortDir
      * @return
+     * @apiNote This Api is used to Search Products
      */
     //Search Product
     @GetMapping("/search/{query}")
@@ -139,6 +151,38 @@ public class ProductController {
     ) {
         PageableResponse<ProductDto> allLive = this.productService.searchByTitle(query, pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(allLive, HttpStatus.OK);
+    }
+
+    //Upload Image
+    @PostMapping("/image/{productId}")
+    public ResponseEntity<ImageResponse> uploadProductImage(
+            @PathVariable String productId,
+            @RequestParam("productImage") MultipartFile image
+    ) throws IOException {
+
+        String fileName = fileService.uploadFile(image, imagePath);
+        ProductDto productDto = productService.findById(productId);
+        productDto.setProductImageName(fileName);
+        ProductDto updateProduct = productService.updateProduct(productDto, productId);
+
+        ImageResponse response = ImageResponse.builder().imageName(updateProduct.getProductImageName()).message(AppConstant.PRODUCT_IMAGE_UPLOAD).success(true).build();
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+    }
+
+    //Serve Image
+    @GetMapping("/image/{productId}")
+    public void serveUserImage(
+            @PathVariable String productId,
+            HttpServletResponse response
+    ) throws IOException {
+
+        ProductDto productDto = productService.findById(productId);
+        InputStream resource = fileService.getResource(imagePath, productDto.getProductImageName());
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource, response.getOutputStream());
+
+
     }
 
 }

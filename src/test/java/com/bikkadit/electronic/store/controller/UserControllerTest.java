@@ -2,7 +2,6 @@ package com.bikkadit.electronic.store.controller;
 
 import com.bikkadit.electronic.store.dtos.PageableResponse;
 import com.bikkadit.electronic.store.dtos.UserDto;
-import com.bikkadit.electronic.store.helper.AppConstant;
 import com.bikkadit.electronic.store.model.User;
 import com.bikkadit.electronic.store.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -197,6 +196,8 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
 
     }
+
+    //Search Usre Test
 
 
 }

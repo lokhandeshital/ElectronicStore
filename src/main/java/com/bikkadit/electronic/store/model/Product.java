@@ -39,4 +39,7 @@ public class Product extends CustomFields {
 
     @Column(name = "stock")
     private Boolean stock;
+
+    @Column(name = "productImageName")
+    private String productImageName;
 }
