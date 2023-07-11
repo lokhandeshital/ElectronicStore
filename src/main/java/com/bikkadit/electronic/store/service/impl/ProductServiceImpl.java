@@ -5,7 +5,9 @@ import com.bikkadit.electronic.store.dtos.ProductDto;
 import com.bikkadit.electronic.store.exception.ResourceNotFoundException;
 import com.bikkadit.electronic.store.helper.AppConstant;
 import com.bikkadit.electronic.store.helper.Helper;
+import com.bikkadit.electronic.store.model.Category;
 import com.bikkadit.electronic.store.model.Product;
+import com.bikkadit.electronic.store.repository.CategoryRepository;
 import com.bikkadit.electronic.store.repository.ProductRepository;
 import com.bikkadit.electronic.store.service.ProductService;
 import org.modelmapper.ModelMapper;
@@ -27,11 +29,14 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     /**
-     * @author Shital Lokhande
-     * @implNote This Impl is used to Create Product
      * @param productDto
      * @return
+     * @author Shital Lokhande
+     * @implNote This Impl is used to Create Product
      */
     @Override
     public ProductDto createProduct(ProductDto productDto) {
@@ -46,10 +51,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * @implNote This Impl is used to Update Product
      * @param productDto
      * @param productId
      * @return
+     * @implNote This Impl is used to Update Product
      */
     @Override
     public ProductDto updateProduct(ProductDto productDto, String productId) {
@@ -71,8 +76,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * @implNote This Impl is used to Delete Product
      * @param productId
+     * @implNote This Impl is used to Delete Product
      */
     @Override
     public void deleteProduct(String productId) {
@@ -85,12 +90,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * @implNote This Impl is Used to Get All Products
      * @param pageNumber
      * @param pageSize
      * @param sortBy
      * @param sortDir
      * @return
+     * @implNote This Impl is Used to Get All Products
      */
     @Override
     public PageableResponse<ProductDto> getAllProduct(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
@@ -103,9 +108,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * @implNote This Impl is used to Get Single Product
      * @param productId
      * @return
+     * @implNote This Impl is used to Get Single Product
      */
     @Override
     public ProductDto findById(String productId) {
@@ -118,12 +123,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * @implNote This Impl is used to Get All Live
      * @param pageNumber
      * @param pageSize
      * @param sortBy
      * @param sortDir
      * @return
+     * @implNote This Impl is used to Get All Live
      */
     @Override
     public PageableResponse<ProductDto> getAllLive(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
@@ -135,13 +140,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * @implNote This Impl is used to Search Product By Title
      * @param subTitle
      * @param pageNumber
      * @param pageSize
      * @param sortBy
      * @param sortDir
      * @return
+     * @implNote This Impl is used to Search Product By Title
      */
     @Override
     public PageableResponse<ProductDto> searchByTitle(String subTitle, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
@@ -150,5 +155,40 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> page = this.productRepository.findByTitleContaining(subTitle, pageable);
         PageableResponse<ProductDto> pageableResponse = Helper.getPageableResponse(page, ProductDto.class);
         return pageableResponse;
+    }
+
+    @Override
+    public ProductDto createWithCategory(ProductDto productDto, String categoryId) {
+
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND + categoryId));
+        Product product = mapper.map(productDto, Product.class);
+
+        // product id
+        String productId = UUID.randomUUID().toString();
+        product.setProductId(productId);
+        // Added
+        product.setCategory(category);
+        Product saveProduct = productRepository.save(product);
+        return mapper.map(saveProduct, ProductDto.class);
+    }
+
+    @Override
+    public ProductDto updateCategory(String productId, String categoryId) {
+
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.PRODUCT_NOT_FOUND + productId));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND + categoryId));
+        product.setCategory(category);
+        Product saveProduct = productRepository.save(product);
+        return mapper.map(saveProduct, ProductDto.class);
+    }
+
+    @Override
+    public PageableResponse<ProductDto> getAllOfCategory(String categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+
+        Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.CATEGORY_NOT_FOUND + categoryId));
+        Page<Product> page = productRepository.findByCategory(category, pageable);
+        return Helper.getPageableResponse(page, ProductDto.class);
     }
 }

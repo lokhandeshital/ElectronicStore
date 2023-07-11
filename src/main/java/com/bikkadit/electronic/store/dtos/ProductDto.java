@@ -1,5 +1,6 @@
 package com.bikkadit.electronic.store.dtos;
 
+import com.bikkadit.electronic.store.model.Category;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -31,6 +32,8 @@ public class ProductDto extends CustomDto {
     private Boolean stock;
 
     private String productImageName;
+
+    private CategoryDto category;
 
 
 }
