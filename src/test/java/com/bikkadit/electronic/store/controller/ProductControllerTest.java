@@ -217,7 +217,46 @@ public class ProductControllerTest {
                 .andExpect(status().isOk());
     }
 
-    //Saerch By Title Test
+    //Search By Title Test
+    @Test
+    public void searchByTitleTest() throws Exception {
+
+        ProductDto productDto1 = ProductDto.builder().title("Samsung Tv")
+                .description("This Tv Contain many Feature")
+                .quantity(10l)
+                .price(60000.00)
+                .discountedPrice(55000.00)
+                .stock(true)
+                .live(true)
+                .build();
+
+        ProductDto productDto2 = ProductDto.builder().title("OnePlus Tv")
+                .description("This Tv Contain many Feature")
+                .quantity(10l)
+                .price(80000.00)
+                .discountedPrice(75000.00)
+                .stock(true)
+                .live(true)
+                .build();
+
+        PageableResponse<ProductDto> pageableResponse = new PageableResponse<>();
+        pageableResponse.setLastPage(false);
+        pageableResponse.setTotalElements(2000l);
+        pageableResponse.setPageNumber(50);
+        pageableResponse.setContent(Arrays.asList(productDto1, productDto2));
+        pageableResponse.setTotalPages(200);
+        pageableResponse.setPageSize(20);
+
+        Mockito.when(productService.searchByTitle(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyString())).thenReturn(pageableResponse);
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/products/" + true)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
 
 
 }
