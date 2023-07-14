@@ -25,7 +25,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/user/")
 @Slf4j
 public class UserController {
 
@@ -45,7 +45,7 @@ public class UserController {
      * @return
      */
     //create
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
         log.info("Initiated Request for Create User Details");
         UserDto createUser = this.userService.createUser(userDto);

@@ -1,14 +1,8 @@
 package com.bikkadit.electronic.store.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "products")
@@ -16,6 +10,7 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Product extends CustomFields {
 
     @Id
@@ -41,4 +36,12 @@ public class Product extends CustomFields {
 
     @Column(name = "stock")
     private Boolean stock;
+
+    @Column(name = "productImageName")
+    private String productImageName;
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_ids")
+    private Category category;
 }

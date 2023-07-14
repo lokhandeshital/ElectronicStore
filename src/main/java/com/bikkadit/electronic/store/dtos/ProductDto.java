@@ -1,5 +1,6 @@
 package com.bikkadit.electronic.store.dtos;
 
+import com.bikkadit.electronic.store.model.Category;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -11,30 +12,28 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductDto extends CustomDto{
+@Builder
+public class ProductDto extends CustomDto {
 
     private String productId;
 
-    @NotEmpty
-    @Size(min = 2,max = 50,message = "Title Contain min 2 and max 50 Character !!")
     private String title;
 
-    @NotEmpty
     private String description;
 
-    @NotEmpty
     private Double price;
 
     private Double discountedPrice;
 
-    @NotEmpty
     private Long quantity;
 
-    @NotEmpty
     private Boolean live;
 
-    @NotEmpty
     private Boolean stock;
+
+    private String productImageName;
+
+    private CategoryDto category;
 
 
 }

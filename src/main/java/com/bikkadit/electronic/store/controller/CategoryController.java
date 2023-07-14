@@ -3,9 +3,11 @@ package com.bikkadit.electronic.store.controller;
 import com.bikkadit.electronic.store.dtos.CategoryDto;
 import com.bikkadit.electronic.store.dtos.ImageResponse;
 import com.bikkadit.electronic.store.dtos.PageableResponse;
+import com.bikkadit.electronic.store.dtos.ProductDto;
 import com.bikkadit.electronic.store.helper.AppConstant;
 import com.bikkadit.electronic.store.service.CategoryService;
 import com.bikkadit.electronic.store.service.FileService;
+import com.bikkadit.electronic.store.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @RestController
-@RequestMapping("api/category")
+@RequestMapping("/api/category/")
 @Slf4j
 public class CategoryController {
 
@@ -35,11 +37,14 @@ public class CategoryController {
     @Value("${category.profile.image.path}")
     private String imageUploadPath;
 
+    @Autowired
+    private ProductService productService;
+
     /**
-     * @author Shital
-     * @apiNote This Api is used to Create Category
      * @param categoryDto
      * @return
+     * @author Shital
+     * @apiNote This Api is used to Create Category
      */
     @PostMapping
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
@@ -51,14 +56,14 @@ public class CategoryController {
     }
 
     /**
-     * @apiNote This Api is used to update Category
      * @param categoryDto
      * @param categoryId
      * @return
+     * @apiNote This Api is used to update Category
      */
     @PutMapping("{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable String categoryId) {
-        log.info("Initiated Request for Update Category with categoryId : {} " , categoryId);
+        log.info("Initiated Request for Update Category with categoryId : {} ", categoryId);
         CategoryDto updateCategory = this.categoryService.updateCategory(categoryDto, categoryId);
         log.info("Completed Request for Update Category with categoryId : {} ", categoryId);
         return new ResponseEntity<>(updateCategory, HttpStatus.OK);
@@ -66,9 +71,9 @@ public class CategoryController {
     }
 
     /**
-     * @apiNote This Api is used to Delete Category
      * @param categoryId
      * @return
+     * @apiNote This Api is used to Delete Category
      */
     @DeleteMapping("{categoryId}")
     public ResponseEntity<String> delete(@PathVariable String categoryId) {
@@ -80,12 +85,12 @@ public class CategoryController {
     }
 
     /**
-     * @apiNote This Api is used to get All Category
      * @param pageNumber
      * @param pageSize
      * @param sortBy
      * @param sortDir
      * @return
+     * @apiNote This Api is used to get All Category
      */
     @GetMapping
     public ResponseEntity<PageableResponse<CategoryDto>> getAll(
@@ -94,17 +99,17 @@ public class CategoryController {
             @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ) {
-        log.info("Initiated Request for Get All Category Details with pageNumber : {},pageSize : {},sortBy : {},sortDir : {}",pageNumber,pageSize,sortBy,sortDir);
+        log.info("Initiated Request for Get All Category Details with pageNumber : {},pageSize : {},sortBy : {},sortDir : {}", pageNumber, pageSize, sortBy, sortDir);
         PageableResponse<CategoryDto> allCategory = this.categoryService.getAll(pageNumber, pageSize, sortBy, sortDir);
-        log.info("Completed Request for Get All Category Details with pageNumber : {},pageSize : {},sortBy : {},sortDir : {}",pageNumber,pageSize,sortBy,sortDir);
+        log.info("Completed Request for Get All Category Details with pageNumber : {},pageSize : {},sortBy : {},sortDir : {}", pageNumber, pageSize, sortBy, sortDir);
         return new ResponseEntity<>(allCategory, HttpStatus.OK);
 
     }
 
     /**
-     * @apiNote This Api is used to get Single Category
      * @param categoryId
      * @return
+     * @apiNote This Api is used to get Single Category
      */
     @GetMapping("{categoryId}")
     public ResponseEntity<CategoryDto> getSingleCategory(@PathVariable String categoryId) {
@@ -116,12 +121,19 @@ public class CategoryController {
 
     }
 
+    /**
+     * This Api is Used to Upload Category Cover Image
+     * @param image
+     * @param categoryId
+     * @return
+     * @throws IOException
+     */
     //Upload Category Cover Image
     @PostMapping("/image/{categoryId}")
     public ResponseEntity<ImageResponse> uploadCoverImage(
-            @RequestParam("coverImage")MultipartFile image,
+            @RequestParam("coverImage") MultipartFile image,
             @PathVariable String categoryId
-            ) throws IOException {
+    ) throws IOException {
 
         String imageName = fileService.uploadFile(image, imageUploadPath);
         CategoryDto category = categoryService.getSingle(categoryId);
@@ -133,17 +145,82 @@ public class CategoryController {
 
     }
 
+    /**
+     * @apiNote This Api is used to Serve Category Image
+     * @param categoryId
+     * @param response
+     * @throws IOException
+     */
     //Serve Category Image
     @GetMapping("/image/{categoryId}")
     public void serveImage(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
 
         CategoryDto category = categoryService.getSingle(categoryId);
-        log.info("Category cover image name : {}",category.getCoverImage());
+        log.info("Category cover image name : {}", category.getCoverImage());
         InputStream resource = fileService.getResource(imageUploadPath, category.getCoverImage());
 
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-        StreamUtils.copy(resource,response.getOutputStream());
+        StreamUtils.copy(resource, response.getOutputStream());
 
     }
+
+    /**
+     * @apiNote This Api is used to Create Product with Category
+     * @param categoryId
+     * @param productDto
+     * @return
+     */
+    // Create Product With Category
+    @PostMapping("/{categoryId}/products")
+    public ResponseEntity<ProductDto> createProductWithCategory(
+            @PathVariable("categoryId") String categoryId,
+            @RequestBody ProductDto productDto
+    ) {
+        ProductDto productWithCategory = productService.createWithCategory(productDto, categoryId);
+        return new ResponseEntity<>(productWithCategory, HttpStatus.CREATED);
+
+    }
+
+    /**
+     * @apiNote This Api is used to Update Category of Products
+     * @param categoryId
+     * @param productId
+     * @return
+     */
+    //Update Category Of Product
+    @PutMapping("/{categoryId}/products/{productId}")
+    public ResponseEntity<ProductDto> updateCategoryOfProduct(
+            @PathVariable String categoryId,
+            @PathVariable String productId
+    ) {
+        ProductDto productDto = productService.updateCategory(productId, categoryId);
+        return new ResponseEntity<>(productDto, HttpStatus.OK);
+
+    }
+
+    /**
+     * @apiNote This Api is used to Get All Products Of Category
+     * @param categoryId
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
+    //Get Products Of Category
+    @GetMapping("/{categoryId}/products")
+    public ResponseEntity<PageableResponse<ProductDto>> getProductsOfCategory(
+            @PathVariable String categoryId,
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+
+        PageableResponse<ProductDto> response = productService.getAllOfCategory(categoryId, pageNumber, pageSize, sortBy, sortDir);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
 
 }
