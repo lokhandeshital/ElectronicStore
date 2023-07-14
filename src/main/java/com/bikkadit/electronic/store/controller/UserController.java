@@ -39,10 +39,10 @@ public class UserController {
     private String imageUploadPath;
 
     /**
-     * @author Shital Lokhande
-     * @apiNote This Api is used to Create User Details
      * @param userDto
      * @return
+     * @author Shital Lokhande
+     * @apiNote This Api is used to Create User Details
      */
     //create
     @PostMapping()
@@ -55,11 +55,11 @@ public class UserController {
 
 
     /**
-     * @author Shital Lokhande
-     * @apiNote This Api is used to Update User Details
      * @param userDto
      * @param userId
      * @return
+     * @author Shital Lokhande
+     * @apiNote This Api is used to Update User Details
      */
     //update
     @PutMapping("/{userId}")
@@ -71,10 +71,10 @@ public class UserController {
     }
 
     /**
-     * @author Shital Lokhande
-     * @apiNote This Api is Used to Delete User Details
      * @param userId
      * @return
+     * @author Shital Lokhande
+     * @apiNote This Api is Used to Delete User Details
      */
     //delete
     @DeleteMapping("/{userId}")
@@ -88,17 +88,17 @@ public class UserController {
     }
 
     /**
+     * @return
      * @author Shital Lokhande
      * @apiNote This Api is Used to Get All Users Details
-     * @return
      */
     //getAllUser
     @GetMapping
     public ResponseEntity<PageableResponse<UserDto>> getAllUser(
-            @RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize,
-            @RequestParam(value = "sortBy",defaultValue = "userName",required = false) String sortBy,
-            @RequestParam(value = "sortDir",defaultValue = "asc",required = false) String sortDir
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "userName", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ) {
         log.info("Initiated Request for Get All Users Details");
         PageableResponse<UserDto> allUser = this.userService.getAllUser(pageNumber, pageSize, sortBy, sortDir);
@@ -108,10 +108,10 @@ public class UserController {
     }
 
     /**
-     * @author Shital Lokhande
-     * @apiNote This Api is used to Get User By UserId
      * @param userId
      * @return
+     * @author Shital Lokhande
+     * @apiNote This Api is used to Get User By UserId
      */
     //getUserById
     @GetMapping("/{userId}")
@@ -124,10 +124,10 @@ public class UserController {
     }
 
     /**
-     * @author Shital Lokhande
-     * @apiNote This Api is Used to Get User By Email
      * @param email
      * @return
+     * @author Shital Lokhande
+     * @apiNote This Api is Used to Get User By Email
      */
     //getUserByEmail
     @GetMapping("/email/{email}")
@@ -139,10 +139,10 @@ public class UserController {
     }
 
     /**
-     * @author Shital Lokhande
-     * @apiNote This Api is used to Search Users
      * @param keyword
      * @return
+     * @author Shital Lokhande
+     * @apiNote This Api is used to Search Users
      */
     //search user
     @GetMapping("/search/{keyword}")
@@ -155,7 +155,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param image
      * @param userId
      * @return
@@ -164,22 +163,23 @@ public class UserController {
     //Upload User Image
     @PostMapping("/image/{userId}")
     public ResponseEntity<ImageResponse> uploadImage(
-            @RequestParam("userImage")MultipartFile image,
+            @RequestParam("userImage") MultipartFile image,
             @PathVariable String userId
     ) throws IOException {
 
+        log.info("Initiated Request for Upload Image with userId : {}" + userId);
         String imageName = fileService.uploadFile(image, imageUploadPath);
         UserDto user = userService.getUserById(userId);
         user.setImageName(imageName);
         UserDto userDto = userService.updateUser(user, userId);
 
         ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).success(true).build();
-        return new ResponseEntity<>(imageResponse,HttpStatus.CREATED);
+        log.info("Completed Request for Upload Image with userId : {}" + userId);
+        return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
 
     }
 
     /**
-     *
      * @param userId
      * @param response
      * @throws IOException
@@ -189,11 +189,11 @@ public class UserController {
     public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
 
         UserDto user = userService.getUserById(userId);
-        log.info(" User image name : {} ",user.getImageName());
+        log.info(" User image name : {} ", user.getImageName());
         InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());
 
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-        StreamUtils.copy(resource,response.getOutputStream());
+        StreamUtils.copy(resource, response.getOutputStream());
 
 
     }
