@@ -53,7 +53,6 @@ public class CartController {
 
         CartDto cartDto = cartService.getCartByUser(userId);
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
-
     }
 
 
