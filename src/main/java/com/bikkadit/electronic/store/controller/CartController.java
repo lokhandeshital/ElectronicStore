@@ -1,6 +1,7 @@
 package com.bikkadit.electronic.store.controller;
 
 import com.bikkadit.electronic.store.dtos.AddItemToCartRequest;
+import com.bikkadit.electronic.store.dtos.ApiResponse;
 import com.bikkadit.electronic.store.dtos.CartDto;
 import com.bikkadit.electronic.store.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,18 @@ public class CartController {
 
         CartDto cartDto = cartService.addItemToCart(userId, request);
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/{userId}/items/{itemId}")
+    public ResponseEntity<ApiResponse> removeItemFromCart(@PathVariable String userId, @PathVariable Integer itemId) {
+
+        cartService.removeItemFromCart(userId, itemId);
+        ApiResponse response = ApiResponse.builder()
+                .message("Item is Removed")
+                .success(true)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
