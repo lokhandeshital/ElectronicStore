@@ -22,7 +22,6 @@ public class CartController {
         CartDto cartDto = cartService.addItemToCart(userId, request);
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
 
-
     }
 
 }
