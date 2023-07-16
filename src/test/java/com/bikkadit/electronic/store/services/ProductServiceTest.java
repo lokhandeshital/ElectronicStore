@@ -1,10 +1,14 @@
 package com.bikkadit.electronic.store.services;
 
+import com.bikkadit.electronic.store.dtos.CategoryDto;
 import com.bikkadit.electronic.store.dtos.PageableResponse;
 import com.bikkadit.electronic.store.dtos.ProductDto;
 import com.bikkadit.electronic.store.helper.AppConstant;
+import com.bikkadit.electronic.store.model.Category;
 import com.bikkadit.electronic.store.model.Product;
+import com.bikkadit.electronic.store.repository.CategoryRepository;
 import com.bikkadit.electronic.store.repository.ProductRepository;
+import com.bikkadit.electronic.store.service.CategoryService;
 import com.bikkadit.electronic.store.service.ProductService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +39,14 @@ public class ProductServiceTest {
     private ModelMapper mapper;
 
     Product product;
+
+    Category category;
+
+    @MockBean
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @BeforeEach
     public void init() {
@@ -205,10 +217,24 @@ public class ProductServiceTest {
         List<Product> productList = Arrays.asList(product, product1, product2);
         Page<Product> page = new PageImpl<>(productList);
 
-        Mockito.when(productRepository.findByTitleContaining(("Tv") , (Pageable) Mockito.any())).thenReturn(page);
-        PageableResponse<ProductDto> searchByTitle = productService.searchByTitle("Tv", 1, 2, "title", "asc");
+        Mockito.when(productRepository.findByTitleContaining(Mockito.anyString(), Mockito.any())).thenReturn(page);
+        PageableResponse<ProductDto> searchByTitle = productService.searchByTitle("keyword", 1, 2, "title", "asc");
         Assertions.assertEquals(3, searchByTitle.getContent().size());
 
 
     }
+
+    //Create With Category Test
+    @Test
+    public void createWithCategory() {
+
+        Mockito.when(productRepository.save(Mockito.any())).thenReturn(product);
+
+
+    }
+
+    //Update Category Test
+
+
+    //Get All Category
 }

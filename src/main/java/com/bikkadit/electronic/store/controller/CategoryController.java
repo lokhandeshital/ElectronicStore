@@ -123,6 +123,7 @@ public class CategoryController {
 
     /**
      * This Api is Used to Upload Category Cover Image
+     *
      * @param image
      * @param categoryId
      * @return
@@ -135,21 +136,23 @@ public class CategoryController {
             @PathVariable String categoryId
     ) throws IOException {
 
+        log.info("Initiated Request for Upload Cover Image with categoryId : {} ", categoryId);
         String imageName = fileService.uploadFile(image, imageUploadPath);
         CategoryDto category = categoryService.getSingle(categoryId);
         category.setCoverImage(imageName);
         CategoryDto categoryDto = categoryService.updateCategory(category, categoryId);
 
         ImageResponse imageResponse = ImageResponse.builder().imageName(imageName).success(true).build();
+        log.info("Completed Request for Upload Cover Image with categoryId : {} ", categoryId);
         return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
 
     }
 
     /**
-     * @apiNote This Api is used to Serve Category Image
      * @param categoryId
      * @param response
      * @throws IOException
+     * @apiNote This Api is used to Serve Category Image
      */
     //Serve Category Image
     @GetMapping("/image/{categoryId}")
@@ -165,10 +168,10 @@ public class CategoryController {
     }
 
     /**
-     * @apiNote This Api is used to Create Product with Category
      * @param categoryId
      * @param productDto
      * @return
+     * @apiNote This Api is used to Create Product with Category
      */
     // Create Product With Category
     @PostMapping("/{categoryId}/products")
@@ -176,16 +179,18 @@ public class CategoryController {
             @PathVariable("categoryId") String categoryId,
             @RequestBody ProductDto productDto
     ) {
+        log.info("Initiated Request for Create Product with CategoryId : {}" + categoryId);
         ProductDto productWithCategory = productService.createWithCategory(productDto, categoryId);
+        log.info("Completed Request for Create Product with CategoryId : {}" + categoryId);
         return new ResponseEntity<>(productWithCategory, HttpStatus.CREATED);
 
     }
 
     /**
-     * @apiNote This Api is used to Update Category of Products
      * @param categoryId
      * @param productId
      * @return
+     * @apiNote This Api is used to Update Category of Products
      */
     //Update Category Of Product
     @PutMapping("/{categoryId}/products/{productId}")
@@ -193,19 +198,21 @@ public class CategoryController {
             @PathVariable String categoryId,
             @PathVariable String productId
     ) {
+        log.info("Initiated Request for Upload Category of Product with categoryId : {}" + categoryId);
         ProductDto productDto = productService.updateCategory(productId, categoryId);
+        log.info("Completed Request for Upload Category of Product with categoryId : {}" + categoryId);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
 
     }
 
     /**
-     * @apiNote This Api is used to Get All Products Of Category
      * @param categoryId
      * @param pageNumber
      * @param pageSize
      * @param sortBy
      * @param sortDir
      * @return
+     * @apiNote This Api is used to Get All Products Of Category
      */
     //Get Products Of Category
     @GetMapping("/{categoryId}/products")
@@ -217,7 +224,9 @@ public class CategoryController {
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ) {
 
+        log.info("Initiated Request for get Products of Category ");
         PageableResponse<ProductDto> response = productService.getAllOfCategory(categoryId, pageNumber, pageSize, sortBy, sortDir);
+        log.info("Completed Request for get Products of Category ");
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }

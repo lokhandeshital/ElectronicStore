@@ -197,7 +197,39 @@ public class UserControllerTest {
 
     }
 
-    //Search Usre Test
+    //Search User Test
+    @Test
+    public void searchUserTest() throws Exception {
+
+        UserDto userDto1 = UserDto.builder().userName("Sagar")
+                .email("sagar123@gmail.com")
+                .about("This is Testing create method")
+                .gender("male")
+                .imageName("xyz.png")
+                .password("sagar")
+                .build();
+
+        UserDto userDto2 = UserDto.builder().userName("Shubham")
+                .email("shubhamlokhande596@gmail.com")
+                .about("This is Testing create method")
+                .gender("male")
+                .imageName("cda.png")
+                .password("shubham")
+                .build();
+
+        String keyword = "Sagar";
+
+        Mockito.when(userService.searchUser(Mockito.anyString())).thenReturn(Arrays.asList(userDto1, userDto2));
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/user/" + keyword)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+
+    }
 
 
 }
