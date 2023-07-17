@@ -18,6 +18,12 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+    /**
+     * @apiNote This Api is Used to Add Item To Cart
+     * @param userId
+     * @param request
+     * @return
+     */
     // Add item to cart
     @PostMapping("/{userId}")
     public ResponseEntity<CartDto> addItemToCart(@PathVariable String userId, @RequestBody AddItemToCartRequest request) {
@@ -29,6 +35,12 @@ public class CartController {
 
     }
 
+    /**
+     * @apiNote This Api is Used to Remove Item From Cart
+     * @param userId
+     * @param itemId
+     * @return
+     */
     @DeleteMapping("/{userId}/items/{itemId}")
     public ResponseEntity<ApiResponse> removeItemFromCart(@PathVariable String userId, @PathVariable Integer itemId) {
         log.info("Initiated Request for Remove Item From Cart with userId : {}", userId);
@@ -41,6 +53,11 @@ public class CartController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * @apiNote This Api is Used to Clear Cart
+     * @param userId
+     * @return
+     */
     //Clear Cart
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponse> clearCart(@PathVariable String userId) {
@@ -54,6 +71,11 @@ public class CartController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * @apiNote This Api is Used to Get Cart
+     * @param userId
+     * @return
+     */
     //getCart
     @GetMapping("/{userId}")
     public ResponseEntity<CartDto> getCart(@PathVariable String userId) {
