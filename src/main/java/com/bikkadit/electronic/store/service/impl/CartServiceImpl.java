@@ -44,6 +44,12 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private ModelMapper mapper;
 
+    /**
+     * @implNote This Impl is Used to Add Item To Cart
+     * @param userId
+     * @param request
+     * @return
+     */
     @Override
     public CartDto addItemToCart(String userId, AddItemToCartRequest request) {
 
@@ -103,6 +109,11 @@ public class CartServiceImpl implements CartService {
         return mapper.map(updateCart, CartDto.class);
     }
 
+    /**
+     * @implNote This Impl is Used to Remove Item From Cart
+     * @param userId
+     * @param cartItem
+     */
     @Override
     public void removeItemFromCart(String userId, Integer cartItem) {
 
@@ -112,6 +123,10 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.delete(cartItem1);
     }
 
+    /**
+     * @implNote This Impl is Used to Clear Cart
+     * @param userId
+     */
     @Override
     public void clearCart(String userId) {
 
@@ -126,6 +141,11 @@ public class CartServiceImpl implements CartService {
 
     }
 
+    /**
+     * @implNote This Impl is Used to Get Cart By User
+     * @param userId
+     * @return
+     */
     @Override
     public CartDto getCartByUser(String userId) {
 
