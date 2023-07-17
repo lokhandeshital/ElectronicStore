@@ -14,6 +14,7 @@ import com.bikkadit.electronic.store.repository.CartRepository;
 import com.bikkadit.electronic.store.repository.ProductRepository;
 import com.bikkadit.electronic.store.repository.UserRepository;
 import com.bikkadit.electronic.store.service.CartService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CartServiceImpl implements CartService {
 
     @Autowired
@@ -45,6 +47,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDto addItemToCart(String userId, AddItemToCartRequest request) {
 
+        log.info("Initiated Request for Add Item to Cart with userId : {}", userId);
         String productId = request.getProductId();
         Integer quantity = request.getQuantity();
 
@@ -96,23 +99,28 @@ public class CartServiceImpl implements CartService {
         }
         cart.setUser(user);
         Cart updateCart = cartRepository.save(cart);
+        log.info("Completed Request for Add Item to Cart with userId : {}", userId);
         return mapper.map(updateCart, CartDto.class);
     }
 
     @Override
     public void removeItemFromCart(String userId, Integer cartItem) {
 
+        log.info("Initiated Request for Remove Item From Cart with userId : {}", userId);
         CartItem cartItem1 = cartItemRepository.findById(cartItem).orElseThrow(() -> new ResourceNotFoundException(AppConstant.CART_NOT_FOUND));
+        log.info("Completed Request for Remove Item From Cart with userId : {}", userId);
         cartItemRepository.delete(cartItem1);
     }
 
     @Override
     public void clearCart(String userId) {
 
+        log.info("Initiated Request for Clear Cart with userId : {}", userId);
         //fetch the user from Database
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException(AppConstant.CART_USER_NOT_FOUND));
         cart.getItems().clear();
+        log.info("Completed Request for Clear Cart with userId : {}", userId);
         cartRepository.save(cart);
 
 
@@ -121,8 +129,10 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDto getCartByUser(String userId) {
 
+        log.info("Initiated Request for Get Cart By User with userId : {}", userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER_NOT_FOUND));
         Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException(AppConstant.CART_USER_NOT_FOUND));
+        log.info("Completed Request for Get Cart By User with userId : {}", userId);
         return mapper.map(cart, CartDto.class);
     }
 }
