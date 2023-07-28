@@ -10,30 +10,18 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @ToString
-public class OrderDto {
+public class CreateOrderRequest {
 
-    private String orderId;
+    private String cartId;
+    private String userId;
 
     private String orderStatus = "PENDING";
-
     private String paymentStatus = "NOT-PAID";
-
-    private Integer orderAmount;
-
     private String billingAddress;
-
     private String billingPhone;
-
     private String billingName;
-
-    private Date orderDate = new Date();
-
-    private Date deliveredDate;
-
-    private UserDto userDto;
-
-    private List<OrderItemDto> orderItems = new ArrayList<>();
 
 
 }

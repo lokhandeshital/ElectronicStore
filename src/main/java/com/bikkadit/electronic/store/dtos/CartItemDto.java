@@ -15,7 +15,7 @@ public class CartItemDto {
 
     private Integer quantity;
 
-    private Double totalPrize;
+    private Integer totalPrize;
 
     private CartDto cartDto;
 

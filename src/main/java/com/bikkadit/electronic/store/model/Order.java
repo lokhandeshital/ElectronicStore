@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -24,7 +25,7 @@ public class Order {
     //Non-paid,paid
     private String paymentStatus;
 
-    private Double orderAmount;
+    private Integer orderAmount;
 
     @Column(length = 1000)
     private String billingAddress;

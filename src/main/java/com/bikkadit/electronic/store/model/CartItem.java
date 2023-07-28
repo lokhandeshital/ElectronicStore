@@ -22,7 +22,7 @@ public class CartItem {
 
     private Integer quantity;
 
-    private Double totalPrize;
+    private Integer totalPrize;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")

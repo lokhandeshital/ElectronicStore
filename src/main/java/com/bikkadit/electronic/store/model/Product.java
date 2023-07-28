@@ -23,10 +23,10 @@ public class Product extends CustomFields {
     private String description;
 
     @Column(name = "price")
-    private Double price;
+    private Integer price;
 
     @Column(name = "discountedPrice")
-    private Double discountedPrice;
+    private Integer discountedPrice;
 
     @Column(name = "quantity")
     private Long quantity;

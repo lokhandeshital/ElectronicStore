@@ -21,9 +21,9 @@ public class ProductDto extends CustomDto {
 
     private String description;
 
-    private Double price;
+    private Integer price;
 
-    private Double discountedPrice;
+    private Integer discountedPrice;
 
     private Long quantity;
 
